@@ -23,6 +23,7 @@ class HackerNewsController implements ControllerProviderInterface {
     const NEWS_PER_PAGE = 10;
 
     private $hackerNewsApiEndpoint = 'https://hacker-news.firebaseio.com/v0/';
+    private $frontendUrl = 'https://news.ycombinator.com';
 
     /**
      * @var Client
@@ -67,7 +68,8 @@ class HackerNewsController implements ControllerProviderInterface {
                         $page > 2 ? ['p' => $page - 1] : []
                     )
                 ),
-                'currentPage' => $page
+                'currentPage' => $page,
+                'websiteUrl' => $this->frontendUrl
             ])
         );
 
@@ -99,7 +101,7 @@ class HackerNewsController implements ControllerProviderInterface {
                 $hostArray = array_reverse(explode('.', $host));
                 $details['host'] = $hostArray[1] . '.' . $hostArray[0];
             } else {
-                $details['url'] = 'https://news.ycombinator.com/item?id=' . $details['id'];
+                $details['url'] = $this->frontendUrl . '/item?id=' . $details['id'];
             }
             $details['time'] = Formatter::timeIntervalRelativeToNow($details['time']);
             return $details;
