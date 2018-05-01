@@ -1,7 +1,7 @@
 Hacker News
 ====
 
-This website displays top news from https://news.ycombinator.com/news. It basically just displays those news in a different style.
+This website displays top news from [Hacker News](https://news.ycombinator.com/news). It basically just displays those news in a different style. It seems to me that [this API endpoint](https://hacker-news.firebaseio.com/v0/topstories.json) returns what's displayed on the site so I used it for this app. 
 
 ### Tech stack
 - silex
