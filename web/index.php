@@ -10,6 +10,15 @@ $app = new Application([
     'debug' => true
 ]);
 
+if (isset($app_env) && in_array($app_env, array('prod','dev','test')))
+    $app['env'] = $app_env;
+else
+    $app['env'] = 'prod';
+
 $app->mount('/', new HackerNewsController($app, new Client()));
 
-$app->run();
+if ('test' === $app['env']) {
+    return $app;
+} else {
+    $app->run();
+}

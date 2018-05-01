@@ -9,8 +9,8 @@
 namespace Eigensonne\Controller;
 
 use Eigensonne\Application;
+use Eigensonne\Utilities\Formatter;
 use GuzzleHttp\ClientInterface;
-use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp\Client;
 use Silex\Api\ControllerProviderInterface;
@@ -85,7 +85,9 @@ class HackerNewsController implements ControllerProviderInterface {
             $data = [];
             $index = ($page - 1) * self::NEWS_PER_PAGE;
             while ($index < self::NEWS_PER_PAGE * $page) {
-                $data[] = $this->getNewsDetails($newsList[$index]);
+                $newsDetails = $this->getNewsDetails($newsList[$index]);
+                $newsDetails['order'] = $index + 1;
+                $data[] = $newsDetails;
                 $index++;
             }
             return $data;
@@ -104,39 +106,11 @@ class HackerNewsController implements ControllerProviderInterface {
             } else {
                 $details['url'] = 'https://news.ycombinator.com/item?id=' . $details['id'];
             }
-            $details['time'] = $this->getTimeRelative($details['time']);
+            $details['time'] = Formatter::timeIntervalRelativeToNow($details['time']);
             return $details;
         }
 
         return null;
-    }
-
-    protected function getTimeRelative(int $timestamp): string {
-
-        $diff = time() - $timestamp;
-
-        $minutes = floor($diff / 60);
-        if ($minutes < 60) {
-            return sprintf('%d minute' . ($minutes > 1 ? 's' : '') . ' ago', $minutes);
-        }
-
-        $hours = floor($minutes / 60);
-        if ($hours < 24) {
-            return sprintf('%d hour' . ($hours > 1 ? 's' : '') . ' ago', $hours);
-        }
-
-        $days = floor($hours / 24);
-        if ($days < 30) {
-            return sprintf('%d day' . ($days > 1 ? 's' : '') . ' ago', $days);
-        }
-
-        $months = floor($days / 30);
-        if ($months < 12) {
-            return sprintf('%d month' . ($months > 1 ? 's' : '') . ' ago', $months);
-        }
-
-        $years = floor($days / 365);
-        return sprintf('%d year' . ($years > 1 ? 's' : '') . ' ago', $years);
     }
 
     protected function getUrlGenerator(): UrlGenerator {

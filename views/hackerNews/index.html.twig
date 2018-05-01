@@ -2,15 +2,16 @@
 
 {% block body %}
     <ul class="pager">
-        <li class="previous{% if currentPage == 1 %} hidden{% endif %}"><a
-                    href="{{ previousUrl }}">Previous</a></li>
+        {% if currentPage > 1 %}
+            <li class="previous"><a href="{{ previousUrl }}">Previous</a></li>
+        {% endif %}
         <li class="next"><a href="{{ nextUrl }}">Next</a></li>
     </ul>
-    <table class="table table-striped">
+    <table class="table table-striped hackerNews">
         {% for news in newsList %}
             <tr>
                 <td>
-                    <a href="{{ news.url }}" target="_blank">{{ news.title }}</a>
+                    {{ news.order }}. <a href="{{ news.url }}" target="_blank">{{ news.title }}</a>
                     {% if news.host is defined %}
                         <a class="text-muted"
                            href="https://news.ycombinator.com/from?site={{ news.host }}"

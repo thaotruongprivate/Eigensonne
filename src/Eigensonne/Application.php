@@ -8,7 +8,6 @@
 
 namespace Eigensonne;
 
-use Silex\Provider\HttpCacheServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 
 class Application extends \Silex\Application {
