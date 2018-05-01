@@ -52,10 +52,9 @@ class HackerNewsController implements ControllerProviderInterface {
         $requestParameters = $request->query->all();
         unset($requestParameters['p']);
 
-        $newsList = $this->getAllNews($page);
         return new Response(
             $this->render('hackerNews/index.html.twig', [
-                'newsList' => $newsList,
+                'newsList' => $this->getTopNews($page),
                 'title' => 'Hacker news',
                 'headText' => 'Top hacker news',
                 'nextUrl' => $this->getUrlGenerator()->generate('news',
@@ -74,11 +73,7 @@ class HackerNewsController implements ControllerProviderInterface {
 
     }
 
-    /**
-     * @param int $page
-     * @return array|null
-     */
-    private function getAllNews($page = 1): ?array {
+    private function getTopNews(int $page = 1): ?array {
         $response = $this->guzzle->get($this->hackerNewsApiEndpoint . 'topstories.json');
         if ($response->getStatusCode() === 200) {
             $newsList = \json_decode($response->getBody(), true);
@@ -95,14 +90,14 @@ class HackerNewsController implements ControllerProviderInterface {
         return null;
     }
 
-    private function getNewsDetails($id): ?array {
+    private function getNewsDetails(int $id): ?array {
         $response = $this->guzzle->get(sprintf($this->hackerNewsApiEndpoint . 'item/%d.json', $id));
         if ($response->getStatusCode() === 200) {
             $details = \json_decode($response->getBody(), true);
             if (isset($details['url'])) {
                 $host = parse_url($details['url'], PHP_URL_HOST);
-                $host = array_reverse(explode('.', $host));
-                $details['host'] = $host[1] . '.' . $host[0];
+                $hostArray = array_reverse(explode('.', $host));
+                $details['host'] = $hostArray[1] . '.' . $hostArray[0];
             } else {
                 $details['url'] = 'https://news.ycombinator.com/item?id=' . $details['id'];
             }

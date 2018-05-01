@@ -8,6 +8,8 @@
 
 namespace Eigensonne;
 
+use Eigensonne\Controller\HackerNewsController;
+use GuzzleHttp\Client;
 use Silex\Provider\TwigServiceProvider;
 
 class Application extends \Silex\Application {
@@ -18,5 +20,9 @@ class Application extends \Silex\Application {
         $this->register(new TwigServiceProvider(), [
             'twig.path' => $this['root_dir'] . '/views',
         ]);
+    }
+
+    public function mountAll() {
+        $this->mount('/', new HackerNewsController($this, new Client()));
     }
 }

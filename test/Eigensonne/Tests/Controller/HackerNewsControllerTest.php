@@ -40,4 +40,12 @@ class HackerNewsControllerTest extends WebTestCase {
         $this->assertEquals('/news?p=4', $crawler->filter('li.next a')->attr('href'));
     }
 
+    public function testThatOtherFiltersAreKeptInPreviousAndNextLinks() {
+        $client = $this->createClient();
+        $crawler = $client->request('GET', '/news?v=tasty&p=5');
+        $this->assertTrue($client->getResponse()->isOk());
+        $this->assertEquals('/news?v=tasty&p=4', $crawler->filter('li.previous a')->attr('href'));
+        $this->assertEquals('/news?v=tasty&p=6', $crawler->filter('li.next a')->attr('href'));
+    }
+
 }

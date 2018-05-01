@@ -1,8 +1,6 @@
 <?php
 
-use Eigensonne\Controller\HackerNewsController;
 use Eigensonne\Application;
-use GuzzleHttp\Client;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -15,7 +13,7 @@ if (isset($app_env) && in_array($app_env, array('prod','dev','test')))
 else
     $app['env'] = 'prod';
 
-$app->mount('/', new HackerNewsController($app, new Client()));
+$app->mountAll();
 
 if ('test' === $app['env']) {
     return $app;
