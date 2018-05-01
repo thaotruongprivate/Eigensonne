@@ -1,5 +1,14 @@
 {
     "require": {
-        "silex/silex": "^2.0"
+        "php": "^7.1.3",
+        "silex/silex": "^2.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "twig/twig": "^2.0",
+        "pimple/pimple": "~3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Eigensonne\\": "src/Eigensonne"
+        }
     }
 }
